@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Craftopia - Smart Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Press Start 2P',monospace;
+  background:#aaaaaa;
+  min-height:100vh;
+  padding:20px 28px;
+  background-image:
+    repeating-linear-gradient(0deg,rgba(0,0,0,0.06) 0,rgba(0,0,0,0.06) 1px,transparent 1px,transparent 16px),
+    repeating-linear-gradient(90deg,rgba(0,0,0,0.06) 0,rgba(0,0,0,0.06) 1px,transparent 1px,transparent 16px);
+}
+
+/* ===== TITLE centered ===== */
+.title-wrap{text-align:center;margin-bottom:20px;}
+.title{
+  font-size:40px;
+  display:inline-block;
+  color:#e8e8e8;
+  letter-spacing:3px;
+  padding:8px 24px 12px;
+  background:linear-gradient(180deg,#999 0%,#666 40%,#333 100%);
+  border:4px solid #111;
+  border-bottom:8px solid #000;
+  border-right:8px solid #000;
+  box-shadow:inset 2px 2px 0 #ccc,inset -2px -2px 0 #444;
+  text-shadow:3px 3px 0 #111,-1px -1px 0 #888,2px 2px 0 #222;
+}
+
+/* ===== LAYOUT ===== */
+.layout{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  max-width:1100px;
+  margin:0 auto;
+}
+.section-label{font-size:13px;color:#444;margin-bottom:8px;text-shadow:1px 1px 0 #ccc;}
+
+/* ===== FEATURE GRID ===== */
+.feature-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:3px;
+  background:#555;
+  border:4px solid #333;
+  border-bottom:6px solid #111;
+  border-right:6px solid #111;
+  box-shadow:inset 2px 2px 0 #888;
+}
+.feature-card{
+  background:#8c8c8c;
+  padding:16px 12px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:10px;min-height:195px;
+  border:2px solid #666;
+  box-shadow:inset 2px 2px 0 #aaa,inset -2px -2px 0 #555;
+}
+
+/* TEAM */
+.team-card{align-items:flex-start;padding:18px 14px;gap:4px;}
+.team-tag{font-size:12px;color:#ffdd44;text-shadow:1px 1px 0 #886600;line-height:2.2;}
+.team-name{font-size:11px;color:#eee;text-shadow:1px 1px 0 #222;line-height:2.4;}
+
+/* GRASS BLOCK */
+.mc-block{width:64px;height:64px;position:relative;border:3px solid #222;box-shadow:inset -4px -4px 0 rgba(0,0,0,0.35),inset 3px 3px 0 rgba(255,255,255,0.12);}
+.mc-block-top{position:absolute;top:0;left:0;right:0;height:30%;background:repeating-linear-gradient(90deg,#5cb82a 0,#5cb82a 8px,#4aa01a 8px,#4aa01a 16px);}
+.mc-block-side{position:absolute;top:30%;left:0;right:0;bottom:0;background:repeating-linear-gradient(90deg,#8B5E3C 0,#8B5E3C 8px,#7a4e2c 8px,#7a4e2c 16px),repeating-linear-gradient(180deg,transparent 0,transparent 7px,rgba(0,0,0,0.12) 7px,rgba(0,0,0,0.12) 8px);}
+
+/* BADGES */
+.card-label{font-size:9px;color:#111;text-shadow:1px 1px 0 #bbb;text-align:center;}
+.status-badge{background:#222;border:3px solid #111;border-bottom:4px solid #000;border-right:4px solid #000;box-shadow:inset 1px 1px 0 #555;padding:5px 10px;font-size:8px;color:#fff;display:flex;align-items:center;gap:6px;}
+
+/* DOOR SPRITE */
+.door-sprite{width:48px;height:70px;position:relative;}
+.door-closed-img{width:48px;height:70px;background:#7a4a1e;border:3px solid #3a2010;box-shadow:inset 3px 3px 0 #b07840,inset -3px -3px 0 #3a1a08;position:relative;}
+.door-closed-img::before{content:'';position:absolute;top:7px;left:5px;width:14px;height:22px;border:2px solid #4a2a0e;background:#9a6430;box-shadow:inset 1px 1px 0 #c08050;}
+.door-closed-img::after{content:'';position:absolute;top:7px;right:5px;width:14px;height:22px;border:2px solid #4a2a0e;background:#9a6430;box-shadow:inset 1px 1px 0 #c08050;}
+.door-knob{position:absolute;bottom:14px;right:8px;width:6px;height:6px;background:#ffd700;border:2px solid #aa8800;}
+.door-open-img{display:none;width:48px;height:70px;position:relative;}
+.door-open-panel{position:absolute;left:0;top:0;width:12px;height:70px;background:#7a4a1e;border:3px solid #3a2010;box-shadow:inset 2px 0 0 #b07840;}
+.door-open-dark{position:absolute;left:12px;top:0;width:36px;height:70px;background:#0d0804;border-top:3px solid #3a2010;border-bottom:3px solid #3a2010;border-right:3px solid #3a2010;}
+
+/* LAMP */
+.lamp-pixel{display:flex;flex-direction:column;align-items:center;}
+.lamp-head-px{width:28px;height:18px;background:#ffee44;border:3px solid #aa8800;box-shadow:0 0 10px 4px rgba(255,220,0,0.55),inset 2px 2px 0 #fffaaa;transition:all 0.3s;}
+.lamp-neck-px{width:8px;height:8px;background:#555;border:2px solid #333;}
+.lamp-body-px{width:16px;height:22px;background:#444;border:2px solid #222;box-shadow:inset 1px 1px 0 #666;}
+.lamp-post-px{width:6px;height:20px;background:#555;border:2px solid #333;}
+.lamp-pixel.lamp-off .lamp-head-px{background:#777;border-color:#444;box-shadow:none;}
+
+/* TOGGLE */
+.toggle-row{display:flex;align-items:center;gap:8px;}
+.toggle-label{font-size:9px;color:#111;text-shadow:1px 1px 0 #ccc;}
+.toggle{position:relative;width:54px;height:26px;cursor:pointer;}
+.toggle input{opacity:0;width:0;height:0;}
+.slider{position:absolute;top:0;left:0;right:0;bottom:0;background:#444;border:3px solid #222;border-bottom:4px solid #111;border-right:4px solid #111;box-shadow:inset 1px 1px 0 #666;}
+.slider::before{content:'';position:absolute;width:14px;height:14px;left:3px;top:3px;background:#bbb;border:2px solid #888;border-bottom:3px solid #555;border-right:3px solid #555;transition:0.15s;}
+input:checked+.slider{background:#335522;}
+input:checked+.slider::before{transform:translateX(24px);background:#77cc44;border-color:#559922;border-bottom-color:#336611;border-right-color:#336611;}
+
+/* SIM BTN */
+.sim-btn{font-family:'Press Start 2P',monospace;font-size:7px;padding:5px 8px;background:#555;color:#eee;border:3px solid #222;border-bottom:4px solid #111;border-right:4px solid #111;cursor:pointer;box-shadow:inset 1px 1px 0 #777;margin-top:4px;}
+.sim-btn:active{transform:translate(1px,1px);}
+
+/* ===== LIVE PANEL ===== */
+.live-panel{
+  background:#7ab0e0;
+  border:4px solid #333;
+  border-bottom:6px solid #111;
+  border-right:6px solid #111;
+  box-shadow:inset 2px 2px 0 #aaddff;
+  position:relative;
+  min-height:430px;
+  overflow:hidden;
+}
+.live-sky{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(180deg,#4a90d9 0%,#7ab8f5 45%,#a8d8ff 100%);}
+
+/* pixel clouds */
+.px-cloud{position:absolute;background:white;image-rendering:pixelated;}
+.c1{width:60px;height:14px;top:32px;left:24px;}
+.c1::before{content:'';position:absolute;width:32px;height:14px;background:white;top:-12px;left:8px;}
+.c1::after{content:'';position:absolute;width:20px;height:14px;background:white;top:-8px;left:28px;}
+.c2{width:48px;height:12px;top:55px;right:32px;}
+.c2::before{content:'';position:absolute;width:24px;height:12px;background:white;top:-10px;left:6px;}
+
+/* Ground */
+.live-ground{position:absolute;bottom:0;left:0;right:0;}
+.live-ground-grass{height:16px;background:repeating-linear-gradient(90deg,#5aaa2a 0,#5aaa2a 16px,#4a9a1a 16px,#4a9a1a 32px);border-top:3px solid #3a7a10;}
+.live-ground-dirt{height:40px;background:repeating-linear-gradient(90deg,#8B5E3C 0,#8B5E3C 16px,#7a4e2c 16px,#7a4e2c 32px),repeating-linear-gradient(180deg,transparent 0,transparent 15px,rgba(0,0,0,0.1) 15px,rgba(0,0,0,0.1) 16px);}
+
+/* GEMPA ALERT */
+.gempa-alert{display:none;position:absolute;top:10px;left:0;right:0;text-align:center;font-size:8px;color:#ff3333;text-shadow:1px 1px 0 #000;z-index:10;animation:blink 0.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+.gempa-alert.show{display:block;}
+
+/* HOUSE WRAP - centered both X and Y in live panel */
+.house-wrap{
+  position:absolute;
+  bottom:56px; /* above ground */
+  left:50%;
+  transform:translateX(-50%);
+  transform-origin:bottom center;
+}
+@keyframes earthquake{
+  0%,100%{transform:translateX(-50%) rotate(0deg);}
+  15%{transform:translateX(-50%) rotate(-5deg);}
+  30%{transform:translateX(-50%) rotate(5deg);}
+  45%{transform:translateX(-50%) rotate(-4deg);}
+  60%{transform:translateX(-50%) rotate(4deg);}
+  75%{transform:translateX(-50%) rotate(-3deg);}
+  90%{transform:translateX(-50%) rotate(3deg);}
+}
+.house-wrap.earthquake{animation:earthquake 0.4s infinite;}
+
+/* LAMP POST */
+.live-lamp{position:absolute;bottom:56px;right:52px;display:flex;flex-direction:column;align-items:center;}
+.live-lamp-glow{position:absolute;top:-14px;left:-32px;width:86px;height:86px;background:radial-gradient(circle,rgba(255,220,0,0.4) 0%,transparent 65%);pointer-events:none;transition:opacity 0.3s;}
+.live-lamp-glow.off{opacity:0;}
+.live-lamp-head{width:24px;height:14px;background:#ffee44;border:2px solid #aa8800;box-shadow:0 0 16px 6px rgba(255,220,0,0.55);transition:all 0.3s;}
+.live-lamp-head.off{background:#666;border-color:#333;box-shadow:none;}
+.live-lamp-arm{width:24px;height:6px;background:#555;border:2px solid #333;}
+.live-lamp-post{width:6px;height:66px;background:#555;border:2px solid #333;margin:0 auto;}
+</style>
+</head>
+<body>
+
+<div class="title-wrap">
+  <div class="title">CRAFTOPIA</div>
+</div>
+
+<div class="layout">
+  <!-- LEFT -->
+  <div>
+    <div class="section-label">Feature</div>
+    <div class="feature-grid">
+
+      <!-- Team -->
+      <div class="feature-card team-card">
+        <div class="team-tag">@AFZ_TEAM</div>
+        <div class="team-name">AISYAH</div>
+        <div class="team-name">FAIZA</div>
+        <div class="team-name">ZHAFIRA</div>
+      </div>
+
+      <!-- Area Aman -->
+      <div class="feature-card" id="area-card">
+        <div class="mc-block"><div class="mc-block-top"></div><div class="mc-block-side"></div></div>
+        <div class="card-label">Area Aman</div>
+        <div class="status-badge" id="area-badge">Status : <span id="area-icon">✅</span></div>
+        <button class="sim-btn" onclick="toggleGempa()" id="gempa-btn">🌍 SIM GEMPA</button>
+      </div>
+
+      <!-- Smart Door -->
+      <div class="feature-card">
+        <div class="door-sprite">
+          <div class="door-closed-img" id="feat-door-closed"><div class="door-knob"></div></div>
+          <div class="door-open-img" id="feat-door-open">
+            <div class="door-open-panel"></div>
+            <div class="door-open-dark"></div>
+          </div>
+        </div>
+        <div class="card-label">Smart Door</div>
+        <div class="toggle-row">
+          <span class="toggle-label" id="door-label">ON</span>
+          <label class="toggle"><input type="checkbox" checked onchange="toggleDoor(this)"><div class="slider"></div></label>
+        </div>
+      </div>
+
+      <!-- Smart Lamp -->
+      <div class="feature-card">
+        <div class="lamp-pixel" id="feat-lamp">
+          <div class="lamp-head-px"></div>
+          <div class="lamp-neck-px"></div>
+          <div class="lamp-body-px"></div>
+          <div class="lamp-post-px"></div>
+        </div>
+        <div class="card-label">Smart Lamp</div>
+        <div class="toggle-row">
+          <span class="toggle-label" id="lamp-label">ON</span>
+          <label class="toggle"><input type="checkbox" checked onchange="toggleLamp(this)"><div class="slider"></div></label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RIGHT: Live Situation -->
+  <div>
+    <div class="section-label">Live situation</div>
+    <div class="live-panel">
+      <div class="live-sky"></div>
+      <div class="px-cloud c1"></div>
+      <div class="px-cloud c2"></div>
+
+      <div class="gempa-alert" id="gempa-alert">⚠ GEMPA TERDETEKSI ⚠</div>
+
+      <!-- HOUSE SVG pixel art -->
+      <div class="house-wrap" id="house-wrap">
+        <svg id="house-svg" width="220" height="200" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" style="display:block;image-rendering:pixelated;">
+
+          <!-- === CHIMNEY === -->
+          <rect x="148" y="30" width="18" height="34" fill="#666"/>
+          <rect x="148" y="30" width="18" height="34" fill="none" stroke="#333" stroke-width="2"/>
+          <!-- chimney top dark -->
+          <rect x="145" y="26" width="24" height="6" fill="#444" stroke="#222" stroke-width="2"/>
+          <!-- smoke pixels -->
+          <rect x="153" y="10" width="4" height="4" fill="#bbb" opacity="0.7"/>
+          <rect x="157" y="4" width="4" height="4" fill="#bbb" opacity="0.5"/>
+          <rect x="151" y="0" width="4" height="4" fill="#bbb" opacity="0.3"/>
+
+          <!-- === ROOF (stepped pixel) === -->
+          <!-- peak -->
+          <rect x="104" y="54" width="12" height="8" fill="#555" stroke="#333" stroke-width="1"/>
+          <!-- row 2 -->
+          <rect x="96" y="62" width="28" height="8" fill="#5a5a5a" stroke="#333" stroke-width="1"/>
+          <!-- row 3 -->
+          <rect x="84" y="70" width="52" height="8" fill="#606060" stroke="#333" stroke-width="1"/>
+          <!-- row 4 -->
+          <rect x="72" y="78" width="76" height="8" fill="#686868" stroke="#333" stroke-width="1"/>
+          <!-- row 5 full width -->
+          <rect x="58" y="86" width="104" height="10" fill="#707070" stroke="#333" stroke-width="1"/>
+          <!-- roof shadow -->
+          <rect x="58" y="94" width="104" height="2" fill="#444"/>
+
+          <!-- === UPPER WALL BLOCK (offset right - step design) === -->
+          <!-- upper wall -->
+          <rect x="100" y="96" width="62" height="42" fill="#c8d4e8" stroke="#888" stroke-width="2"/>
+          <!-- upper wall brick lines -->
+          <line x1="100" y1="110" x2="162" y2="110" stroke="#aab" stroke-width="1" opacity="0.5"/>
+          <line x1="100" y1="124" x2="162" y2="124" stroke="#aab" stroke-width="1" opacity="0.5"/>
+          <!-- upper window -->
+          <rect x="108" y="102" width="36" height="28" fill="#88ccff" stroke="#556" stroke-width="2"/>
+          <rect x="108" y="102" width="36" height="28" fill="none" stroke="#334" stroke-width="2"/>
+          <!-- window cross -->
+          <line x1="126" y1="102" x2="126" y2="130" stroke="#556" stroke-width="2"/>
+          <line x1="108" y1="116" x2="144" y2="116" stroke="#556" stroke-width="2"/>
+          <!-- window shine -->
+          <rect x="110" y="104" width="12" height="10" fill="rgba(255,255,255,0.35)"/>
+
+          <!-- === MAIN WALL === -->
+          <rect x="58" y="96" width="162" height="88" fill="#c0ccd8" stroke="#888" stroke-width="2"/>
+          <!-- wall brick lines horizontal -->
+          <line x1="58" y1="114" x2="220" y2="114" stroke="#aab" stroke-width="1" opacity="0.4"/>
+          <line x1="58" y1="132" x2="220" y2="132" stroke="#aab" stroke-width="1" opacity="0.4"/>
+          <line x1="58" y1="150" x2="220" y2="150" stroke="#aab" stroke-width="1" opacity="0.4"/>
+          <line x1="58" y1="168" x2="220" y2="168" stroke="#aab" stroke-width="1" opacity="0.4"/>
+          <!-- wall vertical brick offsets -->
+          <line x1="90" y1="114" x2="90" y2="132" stroke="#aab" stroke-width="1" opacity="0.3"/>
+          <line x1="138" y1="132" x2="138" y2="150" stroke="#aab" stroke-width="1" opacity="0.3"/>
+          <line x1="170" y1="114" x2="170" y2="132" stroke="#aab" stroke-width="1" opacity="0.3"/>
+
+          <!-- big lower window -->
+          <rect x="158" y="104" width="50" height="50" fill="#88ccff" stroke="#556" stroke-width="2"/>
+          <rect x="158" y="104" width="50" height="50" fill="none" stroke="#334" stroke-width="2"/>
+          <line x1="183" y1="104" x2="183" y2="154" stroke="#556" stroke-width="2"/>
+          <line x1="158" y1="129" x2="208" y2="129" stroke="#556" stroke-width="2"/>
+          <!-- shine -->
+          <rect x="160" y="106" width="18" height="16" fill="rgba(255,255,255,0.3)"/>
+
+          <!-- === DOOR (closed) === -->
+          <g id="live-door-closed">
+            <!-- door frame -->
+            <rect x="78" y="122" width="38" height="62" fill="#3a1a08" stroke="#1a0a04" stroke-width="2"/>
+            <!-- door panel -->
+            <rect x="80" y="124" width="34" height="58" fill="#8B5530"/>
+            <!-- door panels detail -->
+            <rect x="83" y="128" width="12" height="20" fill="#7a4a28" stroke="#4a2a10" stroke-width="1.5"/>
+            <rect x="83" y="128" width="12" height="20" fill="none" stroke="#a06a40" stroke-width="0.5" stroke-dasharray="1"/>
+            <rect x="99" y="128" width="12" height="20" fill="#7a4a28" stroke="#4a2a10" stroke-width="1.5"/>
+            <rect x="99" y="128" width="12" height="20" fill="none" stroke="#a06a40" stroke-width="0.5" stroke-dasharray="1"/>
+            <rect x="83" y="152" width="12" height="18" fill="#7a4a28" stroke="#4a2a10" stroke-width="1.5"/>
+            <rect x="99" y="152" width="12" height="18" fill="#7a4a28" stroke="#4a2a10" stroke-width="1.5"/>
+            <!-- wood grain lines -->
+            <line x1="81" y1="130" x2="81" y2="180" stroke="#6a3a18" stroke-width="1" opacity="0.4"/>
+            <line x1="85" y1="130" x2="85" y2="180" stroke="#6a3a18" stroke-width="1" opacity="0.2"/>
+            <!-- knob -->
+            <rect x="109" y="150" width="6" height="6" fill="#ffd700" stroke="#aa8800" stroke-width="1.5"/>
+          </g>
+
+          <!-- === DOOR (open - side/flat view) === -->
+          <g id="live-door-open" display="none">
+            <!-- dark opening behind door -->
+            <rect x="78" y="122" width="38" height="62" fill="#0d0804" stroke="#1a0a04" stroke-width="2"/>
+            <!-- thin door panel (foreshortened) -->
+            <rect x="78" y="122" width="10" height="62" fill="#8B5530" stroke="#3a1a08" stroke-width="2"/>
+            <!-- wood detail on thin panel -->
+            <line x1="80" y1="124" x2="80" y2="182" stroke="#6a3a18" stroke-width="1" opacity="0.5"/>
+            <line x1="83" y1="124" x2="83" y2="182" stroke="#6a3a18" stroke-width="1" opacity="0.3"/>
+          </g>
+
+          <!-- step ledge between walls -->
+          <rect x="58" y="94" width="42" height="4" fill="#999" stroke="#666" stroke-width="1"/>
+
+          <!-- wall outline -->
+          <rect x="58" y="96" width="162" height="88" fill="none" stroke="#777" stroke-width="2"/>
+          <rect x="100" y="96" width="62" height="42" fill="none" stroke="#777" stroke-width="2"/>
+
+          <!-- foundation -->
+          <rect x="54" y="182" width="170" height="8" fill="#aaa" stroke="#777" stroke-width="2"/>
+          <rect x="54" y="184" width="170" height="4" fill="#888"/>
+        </svg>
+      </div>
+
+      <!-- Lamp post SVG -->
+      <div class="live-lamp">
+        <div class="live-lamp-glow" id="live-glow"></div>
+        <div class="live-lamp-head" id="live-lamp-head"></div>
+        <div class="live-lamp-arm"></div>
+        <div class="live-lamp-post"></div>
+      </div>
+
+      <!-- Ground -->
+      <div class="live-ground">
+        <div class="live-ground-grass"></div>
+        <div class="live-ground-dirt"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let gempaActive = false;
+
+function toggleGempa() {
+  gempaActive = !gempaActive;
+  const card = document.getElementById('area-card');
+  const badge = document.getElementById('area-badge');
+  const icon = document.getElementById('area-icon');
+  const btn = document.getElementById('gempa-btn');
+  const house = document.getElementById('house-wrap');
+  const alert = document.getElementById('gempa-alert');
+  if (gempaActive) {
+    icon.textContent = '❌';
+    badge.style.background = '#cc2222';
+    badge.style.color = '#ffcccc';
+    card.style.background = '#8a3333';
+    card.style.animation = 'card-shake 0.3s infinite';
+    btn.textContent = '✅ RESET';
+    btn.style.background = '#335522';
+    house.classList.add('earthquake');
+    alert.classList.add('show');
+  } else {
+    icon.textContent = '✅';
+    badge.style.background = '';
+    badge.style.color = '';
+    card.style.background = '';
+    card.style.animation = '';
+    btn.textContent = '🌍 SIM GEMPA';
+    btn.style.background = '#555';
+    house.classList.remove('earthquake');
+    alert.classList.remove('show');
+  }
+}
+
+function toggleDoor(el) {
+  const isOpen = el.checked;
+  document.getElementById('door-label').textContent = isOpen ? 'ON' : 'OFF';
+  document.getElementById('feat-door-closed').style.display = isOpen ? 'none' : 'block';
+  document.getElementById('feat-door-open').style.display = isOpen ? 'block' : 'none';
+  // SVG door
+  document.getElementById('live-door-closed').setAttribute('display', isOpen ? 'none' : 'inline');
+  document.getElementById('live-door-open').setAttribute('display', isOpen ? 'inline' : 'none');
+}
+
+function toggleLamp(el) {
+  const isOn = el.checked;
+  document.getElementById('lamp-label').textContent = isOn ? 'ON' : 'OFF';
+  const featLamp = document.getElementById('feat-lamp');
+  const liveHead = document.getElementById('live-lamp-head');
+  const liveGlow = document.getElementById('live-glow');
+  isOn ? featLamp.classList.remove('lamp-off') : featLamp.classList.add('lamp-off');
+  isOn ? liveHead.classList.remove('off') : liveHead.classList.add('off');
+  isOn ? liveGlow.classList.remove('off') : liveGlow.classList.add('off');
+}
+
+// inject card shake
+const st = document.createElement('style');
+st.textContent = `@keyframes card-shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-4px) rotate(-1deg);}75%{transform:translateX(4px) rotate(1deg);}}`;
+document.head.appendChild(st);
+</script>
+</body>
+</html>
